@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./index.css">
+</head>
+
+<body>
+    <div id="app">
+        <nav>
+            <button style="display: none;">
+                <span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M5 12l14 0"></path><path d="M5 12l6 6"></path><path d="M5 12l6 -6"></path></svg>
+                </span>
+            </button>
+            <h1 class="nav-head">HOME</h1>
+        </nav>
+        <div data-view="home">
+            <div class="card">
+                <div class="card-body">
+                    <h3>ADMIN</h3>
+
+                    <div>Please navigate to ADMIN PAGE to use this feature.</div>
+                    <button class="mt-4" data-action="navigateAdmin">
+                        GO TO ADMIN PAGE
+                    </button>
+
+                    <button class="mt-4" data-action="loginAdmin">
+                        LOGIN ADMIN TOOLS
+                    </button>
+
+                    <button class="mt-4" data-view="store">
+                        VIEW STORES LIST
+                    </button>
+
+                    <div class="mt-4">
+                        <div>
+                            <input type="text" id="storeId" placeholder="Store URL" style="width: 100%;">
+                        </div>
+                        <button data-action="getStoreEmail">
+                            GET STORE EMAIL
+                        </button>
+                    </div>
+
+                    <div class="separator"></div>
+
+                    <h3>SHOPIFY - UNDER DEVELOPMENT</h3>
+                    <button class="mt-4" data-action="getStoreUrl">
+                        GET STORE URL
+                    </button>
+                    <div id="storeUrlResult"></div>
+
+                    <div class="separator"></div>
+
+                    <h3>
+                        USF
+
+                        <span class="tooltip">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-help"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path><path d="M12 17l0 .01"></path><path d="M12 13.5a1.5 1.5 0 0 1 1 -1.5a2.6 2.6 0 1 0 -3 -4"></path></svg>
+                            <span class="tooltip-text">
+                                Please navigate to USF APP PAGE to use this feature.
+                            </span>
+                        </span>
+                    </h3>
+                    <button class="mt-4" data-action="loginUsf">
+                        LOGIN USF
+                    </button>
+                    <button class="mt-4" data-action="previewCurrentTheme">
+                        PREVIEW CURRENT THEME
+                    </button>
+
+                    <div class="separator"></div>
+
+                    <h3>SETTINGS</h3>
+                    <button class="mt-4" data-view="setting">
+                        SETUP CREDENTIALS
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div data-view="setting" style="display: none;">
+            <div class="card">
+                <div class="card-header">
+                    <h2>SETUP CREDENTIALS</h2>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <h3>Admin tools</h3>
+                        <div class="form-group">
+                            <label for="admin-username">Username</label>
+                            <input type="text" id="admin-username" v-model="adminUsername">
+                        </div>
+                        <div class="form-group">
+                            <label for="admin-password">Password</label>
+                            <input type="password" id="admin-password" v-model="adminPassword">
+                        </div>
+                        
+                        <div class="separator"></div>
+                        <h3>USF</h3>
+                        <div class="form-group">
+                            <label for="usf-password">Password</label>
+                            <input type="password" id="usf-password" v-model="usfPassword">
+                        </div>
+
+                        <div class="separator"></div>
+                        <h3>STAGING USF</h3>
+                        <div class="form-group">
+                            <label for="staging-usf-password">Password</label>
+                            <input type="password" id="staging-usf-password" v-model="stagingUsfPassword">
+                        </div>
+
+
+                        <div class="separator"></div>
+                        <h3>Email Lookup URL</h3>
+                        <div class="form-group">
+                            <label for="email-lookup-url">URL</label>
+                            <input type="text" id="email-lookup-url" v-model="emailLookupUrl">
+                        </div>
+
+                        <div class="separator"></div>
+                        <h3>USF App URL</h3>
+                        <div class="form-group">
+                            <label for="usf-app-url">URL</label>
+                            <input type="text" id="usf-app-url" v-model="usfAppUrl">
+                        </div>
+                    </form>
+                </div>
+
+                <div class="card-footer">
+                    <button data-action="save">Save</button>
+                </div>
+            </div>
+        </div>
+
+        <div data-view="store" style="display: none;">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Store credentials</h2>
+                </div>
+                <div>
+                    <button data-action="getStoreList">COPY STORE LIST (JSON)</button>
+                </div>
+                <div class="card-body" id="storeList">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./lib/vue-reactivity.js"></script>
+    <script type="module" src="./index.js"></script>
+</body>
+
+</html>
