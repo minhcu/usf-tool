@@ -1,0 +1,23 @@
+on:
+  pull_request:
+    branches:
+      - main
+      - dev
+
+jobs:
+  lint:
+    name: Oxlint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install
+        shell: bash
+
+      - name: Run lint
+        run: npm run lint:oxlint
+        shell: bash
