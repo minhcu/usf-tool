@@ -35,7 +35,7 @@ jobs:
       - name: Cleanup Existed Dev Release and Tag
         run: |
           gh release delete dev-build -y || echo "No existing release to delete"
-          git tag -d dev-build || echo "No existing tag to delete"
+          git push origin :refs/tags/dev-build || echo "No existing remote tag to delete"
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -44,6 +44,7 @@ jobs:
         run: |
           gh release create dev-build dev-release.zip \
             --title "Dev Build" \
+            --target dev \
             --prerelease \
             --notes "Automated dev build from commit ${{ github.sha }}"
         shell: bash
