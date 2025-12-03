@@ -12,18 +12,4 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v6
-        with:
-          node-version: 22
-
-      - name: Install dependencies
-        run: npm install
-        shell: bash
-
-      - name: Run lint
-        run: npm run lint:oxlint
-        shell: bash
-
-      - name: Build project
-        run: npm run build
-        shell: bash
+      - uses: ./.github/composite
