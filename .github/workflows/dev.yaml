@@ -27,3 +27,21 @@ jobs:
         with:
           name: dev-release
           path: dev-release.zip
+
+      - name: Cleanup Existed Dev Release and Tag
+        run: |
+          gh release delete dev-build -y || echo "No existing release to delete"
+          git tag -d dev-build || echo "No existing tag to delete"
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create release
+        uses: actions/create-release@v1
+        id: create_release
+        with:
+          tag_name: dev-build
+          release_name: Dev Build
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
