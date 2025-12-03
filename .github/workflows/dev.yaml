@@ -37,11 +37,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create release
-        uses: actions/create-release@v1
-        id: create_release
-        with:
-          tag_name: dev-build
-          release_name: Dev Build
-          prerelease: true
+        run: |
+          gh release create dev-build dev-release.zip \
+            --title "Dev Build" \
+            --prerelease \
+            --notes "Automated dev build from commit ${{ github.sha }}"
+        shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
