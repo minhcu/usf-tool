@@ -23,3 +23,7 @@ jobs:
       - name: Run lint
         run: npm run lint:oxlint
         shell: bash
+
+      - name: Build project
+        run: npm run build
+        shell: bash
