@@ -32,7 +32,7 @@ function saveCredentials() {
         <Space direction="vertical">
           <Input placeholder="USF App URL" type="text" v-model:value="credentialsStore.credentials.usfAppUrl" />
           <Input placeholder="USF password" type="password" v-model:value="credentialsStore.credentials.usfPassword" />
-          <Input placeholder="Staging USF password" type="password" v-model:value="credentialsStore.credentials.stagingUsfPassword" />
+          <Input placeholder="Staging USF password" type="password" v-model:value="credentialsStore.credentials.usfStagingPassword" />
         </Space>
       </div>
     </Space>

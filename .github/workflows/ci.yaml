@@ -1,0 +1,15 @@
+on:
+  pull_request:
+    branches:
+      - main
+      - dev
+
+jobs:
+  lint:
+    name: Oxlint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: ./.github/composite

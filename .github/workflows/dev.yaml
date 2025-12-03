@@ -1,0 +1,29 @@
+name: Deploy Dev
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  deploy-dev:
+    runs-on: ubuntu-latest
+    environment: dev
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: ./.github/composite
+
+      - name: Zip dist folder
+        run: |
+          cd dist
+          zip -r ../dev-release.zip .
+          cd ..
+        shell: bash
+
+      - name: Upload Zip Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dev-release
+          path: dev-release.zip
