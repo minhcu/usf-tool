@@ -2,7 +2,7 @@
 import { Button, Card, Space } from 'ant-design-vue';
 import { UnlockOutlined, ExportOutlined } from '@ant-design/icons-vue';
 import { h } from 'vue';
-import { loginUsf, previewCurrentTheme } from '@/modules/usf/api'
+import { loginUsf, previewCurrentTheme } from '@/modules/usf/shared/api'
 </script>
 
 <template>
