@@ -8,6 +8,9 @@ on:
         required: false
         default: 'test'
 
+env:
+  BUILD_ENV: ${{ github.event.inputs.build-env }}
+
 permissions:
   contents: write
 
@@ -18,8 +21,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v5
-        with:
-          ref: test
 
       - uses: ./.github/composite
 
