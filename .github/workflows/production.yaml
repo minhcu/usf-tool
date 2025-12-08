@@ -1,0 +1,79 @@
+name: Deploy Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to deploy'
+        required: false
+        default: 'latest'
+
+permissions:
+  contents: write
+
+jobs:
+  deploy-production:
+    runs-on: ubuntu-latest
+    environment: main
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: ./.github/composite
+        
+      - name: Zip dist folder
+        run: |
+                cd dist
+                if [ "${{ inputs.version }}" = "latest" ]; then
+                  zip -r ../latest-release.zip .
+                else
+                  zip -r ../v${{ inputs.version }}-release.zip .
+                fi
+                cd ..
+        shell: bash
+
+      - name: Upload Zip Artifact
+        uses: actions/upload-artifact@v4
+        with:
+            name: if [ "${{ inputs.version }}" = "latest" ]; then
+                      latest-release
+                    else
+                      v${{ inputs.version }}-release
+                  fi
+            path: if [ "${{ inputs.version }}" = "latest" ]; then
+                      latest-release.zip
+                    else
+                      v${{ inputs.version }}-release.zip
+                  fi
+
+      - name: Check if Release Exists
+        run: |
+            # If version exist, abort the release creation but if the version is latest, proceed to delete any existing release and tag
+            if [ "${{ inputs.version }}" != "latest" ]; then
+              gh release view v${{ inputs.version }} && echo "Release v${{ inputs.version }} already exists. Aborting." && exit 1 || echo "No existing release found. Proceeding."
+              git push origin :refs/tags/v${{ inputs.version }} || echo "No existing remote tag to delete"
+            else
+              gh release delete ${{ inputs.version }} -y || echo "No existing release to delete"
+              git push origin :refs/tags/${{ inputs.version }} || echo "No existing remote tag to delete"
+            fi
+        shell: bash
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create release
+        run: |
+            if [ "${{ inputs.version }}" = "latest" ]; then
+              gh release create ${{ inputs.version }} latest-release.zip \
+                --title "Latest Release" \
+                --target ${{ inputs.version }} \
+                --prerelease \
+                --notes "Automated latest build from commit ${{ github.sha }}"
+            else
+              gh release create v${{ inputs.version }} v${{ inputs.version }}-release.zip \
+                --title "v${{ inputs.version }} Release" \
+                --target v${{ inputs.version }} \
+                --prerelease \
+                --notes "Automated v${{ inputs.version }} build from commit ${{ github.sha }}"
+        shell: bash
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
