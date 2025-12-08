@@ -1,12 +1,10 @@
-name: Deploy Dev
+name: Deploy Test
 
 on:
-  push:
-    branches:
-      - dev
+  workflow_dispatch:
 
 env:
-  BUILD_ENV: dev
+  BUILD_ENV: test
 
 permissions:
   contents: write
@@ -19,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
         with:
-          ref: ${{ env.BUILD_ENV }}
+          ref: dev
 
       - uses: ./.github/composite
 
