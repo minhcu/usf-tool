@@ -2,9 +2,14 @@ name: Deploy Test
 
 on:
   workflow_dispatch:
+    inputs:
+      build-env:
+        description: 'Build environment name'
+        required: false
+        default: 'test'
 
 env:
-  BUILD_ENV: test
+  BUILD_ENV: ${{ github.event.inputs.build-env }}
 
 permissions:
   contents: write
