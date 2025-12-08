@@ -35,26 +35,20 @@ jobs:
       - name: Upload Zip Artifact
         uses: actions/upload-artifact@v4
         with:
-            name: if [ "${{ inputs.version }}" = "latest" ]; then
-                      latest-release
-                    else
-                      v${{ inputs.version }}-release
-                  fi
-            path: if [ "${{ inputs.version }}" = "latest" ]; then
-                      latest-release.zip
-                    else
-                      v${{ inputs.version }}-release.zip
-                  fi
+            name: ${{ inputs.version == 'latest' && 'latest-release' || format('v{0}-release', inputs.version) }}
+            path: ${{ inputs.version == 'latest' && 'latest-release.zip' || format('v{0}-release.zip', inputs.version) }}
 
-      - name: Check if Release Exists
+      - name: Cleanup Existing Release and Tag
         run: |
-            # If version exist, abort the release creation but if the version is latest, proceed to delete any existing release and tag
-            if [ "${{ inputs.version }}" != "latest" ]; then
-              gh release view v${{ inputs.version }} && echo "Release v${{ inputs.version }} already exists. Aborting." && exit 1 || echo "No existing release found. Proceeding."
-              git push origin :refs/tags/v${{ inputs.version }} || echo "No existing remote tag to delete"
+            if [ "${{ inputs.version }}" = "latest" ]; then
+              gh release delete latest -y || echo "No existing release to delete"
+              git push origin :refs/tags/latest || echo "No existing remote tag to delete"
             else
-              gh release delete ${{ inputs.version }} -y || echo "No existing release to delete"
-              git push origin :refs/tags/${{ inputs.version }} || echo "No existing remote tag to delete"
+              if gh release view v${{ inputs.version }} > /dev/null 2>&1; then
+                echo "Release v${{ inputs.version }} already exists. Aborting."
+                exit 1
+              fi
+              git push origin :refs/tags/v${{ inputs.version }} || echo "No existing remote tag to delete"
             fi
         shell: bash
         env:
@@ -63,17 +57,17 @@ jobs:
       - name: Create release
         run: |
             if [ "${{ inputs.version }}" = "latest" ]; then
-              gh release create ${{ inputs.version }} latest-release.zip \
+              gh release create latest latest-release.zip \
                 --title "Latest Release" \
-                --target ${{ inputs.version }} \
+                --target main \
                 --prerelease \
                 --notes "Automated latest build from commit ${{ github.sha }}"
             else
               gh release create v${{ inputs.version }} v${{ inputs.version }}-release.zip \
                 --title "v${{ inputs.version }} Release" \
-                --target v${{ inputs.version }} \
-                --prerelease \
+                --target main \
                 --notes "Automated v${{ inputs.version }} build from commit ${{ github.sha }}"
+            fi
         shell: bash
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
