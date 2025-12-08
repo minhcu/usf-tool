@@ -16,8 +16,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v5
-        with:
-          ref: test
 
       - uses: ./.github/composite
 
