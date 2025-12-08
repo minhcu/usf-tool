@@ -1,0 +1,26 @@
+name: Deploy Test
+
+on:
+  workflow_dispatch:
+
+env:
+  BUILD_ENV: test
+
+permissions:
+  contents: write
+
+jobs:
+  deploy-test:
+    runs-on: ubuntu-latest
+    environment: test
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: ./.github/composite
+
+      - uses: ./.github/actions/release
+        with:
+          build-env: ${{ env.BUILD_ENV }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          commit-sha: ${{ github.sha }}
