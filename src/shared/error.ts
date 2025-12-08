@@ -9,7 +9,18 @@ function notifyError(message: string, description?: string) {
     duration: 2,
   })
 }
+
+function notifySuccess(message: string, description?: string) {
+  notify.success({
+    message,
+    description,
+    placement: 'bottom',
+    duration: 2,
+  })
+}
+
 export {
   contextHolder,
   notifyError,
+  notifySuccess,
 }

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { reactive, ref } from 'vue'
+import { notifySuccess } from './error'
 
 export type Credentials = {
   emailLookupUrl: string
@@ -55,8 +56,33 @@ export const useStoreCredentialsStore = defineStore('storeCredentials', () => {
     chrome.storage.local.set({ storeCredentials: stores.value })
   }
 
+  function importFromJson(data: string) {
+    const imported = JSON.parse(data) as StoreCredentials
+    stores.value = {
+      ...stores.value,
+      ...imported,
+    }
+    updateStoreCredentials()
+  }
+
+  async function exportToJson() {
+    const data = JSON.stringify(stores.value, null, 2)
+
+    await navigator.clipboard.writeText(data)
+
+    notifySuccess('Exported stores to clipboard')
+  }
+
+  async function deleteStore(storeId: string) {
+    delete stores.value[storeId]
+    updateStoreCredentials()
+  }
+
   return {
     stores,
     updateStoreCredentials,
+    importFromJson,
+    exportToJson,
+    deleteStore,
   }
 })
