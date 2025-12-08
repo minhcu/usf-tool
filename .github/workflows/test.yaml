@@ -12,7 +12,7 @@ permissions:
   contents: write
 
 jobs:
-  deploy-dev:
+  deploy-test:
     runs-on: ubuntu-latest
     environment: test
 
