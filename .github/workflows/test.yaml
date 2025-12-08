@@ -12,12 +12,12 @@ permissions:
 jobs:
   deploy-dev:
     runs-on: ubuntu-latest
-    environment: dev
+    environment: test
 
     steps:
       - uses: actions/checkout@v5
         with:
-          ref: dev
+          ref: test
 
       - uses: ./.github/composite
 
