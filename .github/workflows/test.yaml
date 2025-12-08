@@ -2,27 +2,27 @@ name: Deploy Test
 
 on:
   workflow_dispatch:
-
-env:
-  BUILD_ENV: test
+    inputs:
+      build-env:
+        description: 'Build environment name'
+        required: false
+        default: 'test'
 
 permissions:
   contents: write
 
 jobs:
-  deploy-dev:
+  deploy-test:
     runs-on: ubuntu-latest
     environment: test
 
     steps:
       - uses: actions/checkout@v5
-        with:
-          ref: test
 
       - uses: ./.github/composite
 
       - uses: ./.github/actions/release
         with:
-          build-env: ${{ env.BUILD_ENV }}
+          build-env: ${{ inputs.build-env }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           commit-sha: ${{ github.sha }}
