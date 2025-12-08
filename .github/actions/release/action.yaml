@@ -1,0 +1,48 @@
+name: Create Release Action
+description: Creates a GitHub release with build artifacts
+
+inputs:
+  build-env:
+    description: 'Build environment name (dev, test, etc.)'
+    required: true
+  github-token:
+    description: 'GitHub token for creating releases'
+    required: true
+  commit-sha:
+    description: 'Commit SHA for release notes'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Zip dist folder
+      run: |
+        cd dist
+        zip -r ../${{ inputs.build-env }}-release.zip .
+        cd ..
+      shell: bash
+
+    - name: Upload Zip Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ inputs.build-env }}-release
+        path: ${{ inputs.build-env }}-release.zip
+
+    - name: Cleanup Existed Release and Tag
+      run: |
+        gh release delete ${{ inputs.build-env }}-build -y || echo "No existing release to delete"
+        git push origin :refs/tags/${{ inputs.build-env }}-build || echo "No existing remote tag to delete"
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+
+    - name: Create release
+      run: |
+        gh release create ${{ inputs.build-env }}-build ${{ inputs.build-env }}-release.zip \
+          --title "${{ inputs.build-env }} Build" \
+          --target ${{ inputs.build-env }} \
+          --prerelease \
+          --notes "Automated ${{ inputs.build-env }} build from commit ${{ inputs.commit-sha }}"
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
