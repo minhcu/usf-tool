@@ -8,9 +8,6 @@ on:
         required: false
         default: 'test'
 
-env:
-  BUILD_ENV: ${{ github.event.inputs.build-env }}
-
 permissions:
   contents: write
 
@@ -26,6 +23,6 @@ jobs:
 
       - uses: ./.github/actions/release
         with:
-          build-env: ${{ env.BUILD_ENV }}
+          build-env: ${{ inputs.build-env }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           commit-sha: ${{ github.sha }}
