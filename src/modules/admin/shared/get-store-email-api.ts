@@ -26,7 +26,6 @@ async function fetchStoreEmailAsync(storeId: string, currentUrl: string) {
     })
     const html = new DOMParser()
       .parseFromString(await response.text(), 'text/html')
-      .querySelector('#lbl')
 
     const emailEl = html?.querySelector<HTMLElement>('[action*="EmailsLookup"] #lbl')
     if (!emailEl)
@@ -52,7 +51,7 @@ export async function getStoreEmailFromUrl(url: string) {
 
   const formattedUrl = url.includes('myshopify')
     ? url.replace('-myshopify-com', '.myshopify.com')
-    : url.replace('-bigcommerce-com', '.bigcommerce.com')
+    : url.replace('-mybigcommerce-com', '.mybigcommerce.com')
 
   const storeCredentialsStore = useStoreCredentialsStore()
   const credentialsStore = useCredentialsStore()
@@ -83,4 +82,8 @@ export async function getStoreEmailFromUrl(url: string) {
   })
 
   if (response?.result?.ok === false) throw new Error(response.result.payload)
+
+  openNewOrExistedTab(
+    credentialsStore.credentials.usfAppUrl + formattedUrl.replace(/\./g, '-') + '/*',
+  )
 }
