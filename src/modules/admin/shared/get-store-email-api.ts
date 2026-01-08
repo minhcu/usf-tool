@@ -84,6 +84,6 @@ export async function getStoreEmailFromUrl(url: string) {
   if (response?.result?.ok === false) throw new Error(response.result.payload)
 
   openNewOrExistedTab(
-    credentialsStore.credentials.usfAppUrl + formattedUrl.replace(/\./g, '-') + '/*',
+    credentialsStore.credentials.usfAppUrl + formattedUrl.replace(/\./g, '-'),
   )
 }
