@@ -5,6 +5,8 @@ import { h, ref } from 'vue';
 import { getStoreEmailFromUrl, loginAdminTool, openAdminTool } from '../shared';
 import { notifyError } from '@/shared/error';
 
+// TODO: the app open tab should remove the '*'
+
 const email = ref('');
 const loadingState = ref<Record<string, boolean>>({
   getStoreUrl: false,

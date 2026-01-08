@@ -5,3 +5,15 @@ body {
 .w-full {
   width: 100%;
 }
+
+.cursor-pointer:hover {
+  cursor: pointer!important;
+}
+
+.no-wrap {
+  white-space: nowrap;
+}
+
+.text-center {
+  text-align: center;
+}
