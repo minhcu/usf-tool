@@ -20,14 +20,13 @@ import ErrorBoundary from '@/modules/app/ErrorBoundary.vue';
           <Card>
             <Space direction="vertical" style="width: 100%;">
               <CredentialsPopup />
-
               <StoresUI />
+
+              <ShopifyFeatures />
 
               <UsfFeatures />
 
               <AdminFeatures />
-
-              <ShopifyFeatures />
             </Space>
           </Card>
         </LayoutContent>
